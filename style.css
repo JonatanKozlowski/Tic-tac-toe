@@ -6,7 +6,10 @@
     font-family:Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
     text-align: center;
     cursor: pointer;
-    
+    transition: all 0.2s ease-in-out;
+}
+.cell:hover {
+    transform: scale(1.1);
 }
 #gameConteinter{
     font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
