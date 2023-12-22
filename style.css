@@ -94,7 +94,7 @@
   text-align: center;
   top: 55px; 
   left: 20px;
-  height: 100px;
+  height: 200px;
 }
 .button-menu:hover .dropdown-content {
 display: block;
