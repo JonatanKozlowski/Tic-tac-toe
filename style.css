@@ -15,8 +15,6 @@
     font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
     text-align: center;
     color: #222222;
-    
-    
 }
 #cellContainer{
     display: grid;
@@ -29,9 +27,8 @@
    
 }
 .button-23 {
-
   background-color: #FFFFFF;
-  border: 1px solid #222222;
+  border: 2px solid #222222;
   border-radius: 8px;
   box-sizing: border-box;
   color: #222222;
@@ -53,6 +50,7 @@
   -webkit-user-select: none;
   width: auto;
   right: 3.9px;
+  top: 6px;
 }
 
 .button-23:focus-visible {
@@ -76,5 +74,4 @@
     font-size: 25px;
     position: relative;
     right: 3.5px;
-
 }
