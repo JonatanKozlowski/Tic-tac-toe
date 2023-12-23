@@ -18,6 +18,8 @@
     transform: scale(1.5);
     position: relative;
     top: 200px;
+    width: 100%;
+    height: 100%;
 }
 #cellContainer{
     display: grid;
@@ -129,4 +131,7 @@ display: block;
     transform: scale(1.5);
   }
   /* Twoje style dla większych ekranów tutaj */
+}
+body {
+  overflow: hidden;
 }
