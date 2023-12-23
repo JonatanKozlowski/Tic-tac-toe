@@ -14,114 +14,71 @@ const winConditions = [
 let options = ["", "", "", "", "", "", "", "", ""];
 let currentPlayer = "X";
 let running = false;
-let aiMovePending = false;
+let waitingForAI = false;
 
 initializeGame();
 
-function initializeGame(){
+function initializeGame() {
     cells.forEach(cell => cell.addEventListener("click", cellClicked));
     restartBtn.addEventListener("click", restartGame);
     statusText.textContent = `Your turn!`;
     running = true;
 }
-function cellClicked() {
-    const cellIndex = this.getAttribute('cellIndex');
 
-    if (options[cellIndex] !== '' || !running) {
-        return;
-    }
-
-    updateCell(this, cellIndex);
-    checkWinner();
-
-    if (running && currentPlayer === 'O') {
-        aiMovePending = true; 
-        setTimeout(() => {
-            if (aiMovePending) {
-                easyAI();
-                aiMovePending = false; 
-            }
-        }, 1000);
-    }
-}
-function updateCell(cell, index){
+function updateCell(cell, index) {
     options[index] = currentPlayer;
     cell.textContent = currentPlayer;
 }
-function changePlayer(){
-    currentPlayer = (currentPlayer == "X") ? "O" : "X";
-    if(currentPlayer === "X"){
-    statusText.textContent = `Your turn!`;
-    }else{
-    statusText.textContent = "EasyAI's turn";
-    }
+
+function changePlayer() {
+    currentPlayer = (currentPlayer === "X") ? "O" : "X";
+    statusText.textContent = (currentPlayer === "X") ? `Your turn!` : "EasyAI's turn";
 }
-function checkWinner(){
-    let roundWon = false;
 
-    for(let i = 0; i < winConditions.length; i++){
-        const condition = winConditions[i];
-        const cellA = options[condition[0]];
-        const cellB = options[condition[1]];
-        const cellC = options[condition[2]];
-
-        if(cellA == "" || cellB == "" || cellC == ""){
-            continue;
-        }
-        if(cellA == cellB && cellB == cellC){
-            roundWon = true;
-            break;
+function checkWinner() {
+    for (let condition of winConditions) {
+        const [a, b, c] = condition.map(index => options[index]);
+        if (a !== "" && a === b && b === c) {
+            statusText.textContent = (currentPlayer === "X") ? "You won!" : "Easy AI won!";
+            running = false;
+            return;
         }
     }
 
-    if(roundWon){
-        if(currentPlayer === "X"){
-        statusText.textContent = `You won!`;
-        }else{
-            statusText.textContent = 'Easy AI won!';
-        }
+    if (!options.includes("")) {
+        statusText.textContent = "Draw!";
         running = false;
-    }
-    else if(!options.includes("")){
-        statusText.textContent = `Draw!`;
-        running = false;
-    }
-    else{
+    } else {
         changePlayer();
     }
 }
+
 function restartGame() {
     currentPlayer = 'X';
     options = ['', '', '', '', '', '', '', '', ''];
     statusText.textContent = 'Your turn!';
-    cells.forEach((cell) => (cell.textContent = ''));
+    cells.forEach(cell => cell.textContent = '');
     running = true;
-
-    
-    aiMovePending = false;
 }
 
 function easyAI() {
-    const availableMoves = [];
-
-    for (let i = 0; i < options.length; i++) {
-        if (options[i] === '') {
-            availableMoves.push(i);
-        }
-    }
+    const availableMoves = options.reduce((moves, value, index) => {
+        if (value === '') moves.push(index);
+        return moves;
+    }, []);
 
     const randomIndex = Math.floor(Math.random() * availableMoves.length);
     const selectedMove = availableMoves[randomIndex];
 
     if (availableMoves.length > 0) {
         updateCell(cells[selectedMove], selectedMove);
-        checkWinner();
     }
 }
+
 function cellClicked() {
     const cellIndex = this.getAttribute('cellIndex');
 
-    if (options[cellIndex] !== '' || !running) {
+    if (options[cellIndex] !== '' || !running || waitingForAI) {
         return;
     }
 
@@ -129,25 +86,12 @@ function cellClicked() {
     checkWinner();
 
     if (running && currentPlayer === 'O') {
-        aiMovePending = true; 
+        waitingForAI = true;
         setTimeout(() => {
-            if (aiMovePending) {
-                const availableMoves = [];
-
-                for (let i = 0; i < options.length; i++) {
-                    if (options[i] === '') {
-                        availableMoves.push(i);
-                    }
-                }
-
-                const randomIndex = Math.floor(Math.random() * availableMoves.length);
-                const selectedMove = availableMoves[randomIndex];
-
-                if (availableMoves.length > 0) {
-                    updateCell(cells[selectedMove], selectedMove);
-                    checkWinner();
-                    aiMovePending = false;
-                }
+            if (waitingForAI) {
+                easyAI();
+                waitingForAI = false;
+                checkWinner();
             }
         }, 1000);
     }

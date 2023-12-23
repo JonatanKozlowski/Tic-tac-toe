@@ -15,6 +15,7 @@ let options = ['', '', '', '', '', '', '', '', ''];
 let currentPlayer = 'X';
 let running = false;
 let waitingForReset = false;
+let waitingForAI = false;
 
 initializeGame();
 
@@ -29,7 +30,7 @@ function initializeGame() {
   function cellClicked() {
     const cellIndex = this.getAttribute('cellIndex');
   
-    if (options[cellIndex] !== '' || !running || waitingForReset) {
+    if (options[cellIndex] !== '' || !running || waitingForReset || waitingForAI) {
       return;
     }
   
@@ -37,9 +38,11 @@ function initializeGame() {
     checkWinner();
   
     if (running && currentPlayer === 'O') {
+      waitingForAI = true; // Blokowanie kliknięć podczas tury AI
       setTimeout(() => {
         if (!waitingForReset) {
           mediumAI();
+          waitingForAI = false; // Odblokowanie kliknięć po zakończeniu tury AI
         }
       }, 1000);
     }
