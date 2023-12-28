@@ -1,3 +1,6 @@
+#1{
+  
+}
 .cell{
     width: 90px;
     height: 90px;
@@ -7,6 +10,8 @@
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+    color: red;
+    border-color: #222222;
 }
 .cell:hover {
     transform: scale(1.1);
@@ -17,7 +22,7 @@
     color: #222222;
     transform: scale(1.5);
     position: relative;
-    top: 200px;
+    top: 100px;
 }
 #cellContainer{
     display: grid;
@@ -130,3 +135,6 @@ display: block;
   }
   /* Twoje style dla większych ekranów tutaj */
 }
+body {
+  overflow: hidden;
+} 
