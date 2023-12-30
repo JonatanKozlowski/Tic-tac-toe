@@ -121,7 +121,10 @@ display: block;
 @media screen and (max-width: 600px) {
   
   #gameConteinter{
-    transform: scale(1);
+    transform: scale(0.9);
+  }
+  #gameConteinter{
+    top: 140px;
   }
   /* np. zmiana rozmiaru elementów, układów */
 }

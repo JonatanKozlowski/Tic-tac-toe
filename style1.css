@@ -120,15 +120,16 @@ right: 11px
 /* Dla urządzeń o szerokości mniejszej niż 600px */
 @media screen and (max-width: 600px) {
 
-#gameConteinter{
-  transform: scale(1);
+#gameContainer1{
+  transform: scale(0.8);
 }
+
 /* np. zmiana rozmiaru elementów, układów */
 }
 
 /* Dla urządzeń o szerokości większej niż 600px */
 @media screen and (min-width: 601px) {
-#gameConteinter{
+#gameContainer1{
   transform: scale(1.5);
 }
 /* Twoje style dla większych ekranów tutaj */

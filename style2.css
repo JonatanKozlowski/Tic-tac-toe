@@ -17,7 +17,6 @@
     font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
     text-align: center;
     color: #222222;
-    transform: scale(1.4);
     position: relative;
     top: 150px;
     width: 100%;
@@ -121,21 +120,18 @@ display: block;
 /* Dla urządzeń o szerokości mniejszej niż 600px */
 @media screen and (max-width: 600px) {
   
-  #gameConteinter{
-    transform: scale(1);
+  #gameContainer1{
+    transform: scale(0.6);
   }
   /* np. zmiana rozmiaru elementów, układów */
 }
 
 /* Dla urządzeń o szerokości większej niż 600px */
 @media screen and (min-width: 601px) {
-  #gameConteinter{
-    transform: scale(1.5);
+  #gameContainer1{
+    transform: scale(1.4);
   }
   /* Twoje style dla większych ekranów tutaj */
-}
-body {
-  overflow: hidden;
 }
 .dropdown-content1 {
   display: none;
