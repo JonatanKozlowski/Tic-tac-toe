@@ -126,6 +126,12 @@ display: block;
   #gameConteinter{
     top: 130px;
   }
+  #a{
+    visibility: hidden;
+  }
+  #b{
+    visibility: hidden;
+  }
   /* np. zmiana rozmiaru elementów, układów */
 }
 
@@ -150,6 +156,7 @@ body {
 .button-menu:hover .dropdown-content1 {
   display: block;
 }
+
 .dropdown-content1 button{
   margin-bottom: 4px;
   padding: 12px 16px;
