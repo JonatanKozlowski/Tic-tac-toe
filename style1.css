@@ -29,7 +29,8 @@
   height: 400px;
   margin: auto;
   font-size: 85px;
-  color: #222222;    
+  color: #222222;
+      
 }
 .button-23 {
 background-color: #FFFFFF;
@@ -123,6 +124,10 @@ right: 11px
 #gameContainer1{
   transform: scale(0.8);
 }
+#gameContainer1{
+  top: 60px;
+}
+
 
 /* np. zmiana rozmiaru elementów, układów */
 }
@@ -133,9 +138,6 @@ right: 11px
   transform: scale(1.5);
 }
 /* Twoje style dla większych ekranów tutaj */
-}
-body {
-overflow: hidden;
 }
 .dropdown-content1 {
 display: none;
