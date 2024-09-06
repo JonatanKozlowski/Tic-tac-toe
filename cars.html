@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f4f4f4;
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            color: #333;
+        }
+        #gameArea {
+            position: relative;
+            width: 600px;
+            height: 100vh;
+            margin: 0 auto;
+            background-color: #fff;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        #distance {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 40px;
+            color: #333;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+        #leaderboardButton {
+    background-color: #FFFFFF;
+    border: 2px solid #222222;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #222222;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    margin: 0;
+    outline: none;
+    padding: 13px 23px;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    touch-action: manipulation;
+    transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+    user-select: none;
+    -webkit-user-select: none;
+    top: 94%;
+    left: 0.4%;
+}
+
+#leaderboardButton:focus-visible {
+    box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+    transition: box-shadow .2s;
+}
+
+#leaderboardButton:active {
+    background-color: #F7F7F7;
+    border-color: #000000;
+    transform: scale(.96);
+}
+
+#leaderboardButton:disabled {
+    border-color: #DDDDDD;
+    color: #DDDDDD;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+#leaderboardButton:hover {
+    background-color: #F7F7F7;
+    border-color: #000000;
+    transform: scale(.96);
+}
+
+        
+        .line {
+            position: absolute;
+            width: 6px;
+            height: 100%;
+            background-color: #333;
+            border-radius: 50px;
+        }
+        .dashed-line {
+            background-image: linear-gradient(white 50%, black 50%);
+            background-size: 100% 30px;
+            background-position: 0 0;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        #leftSolidLine { left: 0; }
+        #middleDashedLine1 { left: calc(33.33% - 5px); }
+        #middleDashedLine2 { left: calc(66.66% - 5px); }
+        #rightSolidLine { right: 0; }
+        .car, .obstacle {
+            width: 50px;
+            height: 100px;
+            background-image: url('car.svg');
+            background-size: cover;
+            background-position: center;
+        }
+        .car {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%) rotate(180deg); /* Obrót samochodu gracza do góry nogami */
+            transition: left 0.3s ease; /* Płynniejsze przesuwanie */
+        }
+        .obstacle {
+            position: absolute;
+            top: -100px;
+            transition: top 0.1s linear; /* Płynniejszy ruch przeszkód */
+        }
+        #speedometer, #distance {
+            position: absolute;
+            top: 10px;
+            font-size: 40px;
+            color: #333;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            border: 2px solid #222222;
+        }
+        #speedometer {
+            right: 10px;
+        }
+        #distance {
+            left: 10px;
+        }
+        #playAgain {
+            background-color: #FFFFFF;
+            border: 2px solid #222222;
+            border-radius: 8px;
+            box-sizing: border-box;
+            color: #222222;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 20px;
+            margin: 0;
+            outline: none;
+            padding: 13px 23px;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            touch-action: manipulation;
+            transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+            user-select: none;
+            -webkit-user-select: none;
+            width: auto;
+            right: 0%;
+            top: 50%;
+            display: none;
+        }
+        #playAgain:focus-visible {
+            box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+            transition: box-shadow .2s;
+        }
+
+        #playAgain:active {
+            background-color: #F7F7F7;
+            border-color: #000000;
+            transform: scale(.96);
+        }
+
+        #playAgain:disabled {
+            border-color: #DDDDDD;
+            color: #DDDDDD;
+            cursor: not-allowed;
+            opacity: 1;
+        }
+        #playAgain:hover {
+            background-color: #F7F7F7;
+            border-color: #000000;
+            transform: scale(.96);
+        }
+    </style>
+</head>
+<body>
+    <button id="leaderboardButton">Leaderboard</button>
+    <div id="speedometer">Prędkość: 0 km/h</div>
+    <div id="distance">Dystans: 0.00 km</div>
+    
+    <div id="gameArea">
+        <!-- Linie pełne i przerywane -->
+        <div class="line" id="leftSolidLine"></div>
+        <div class="line dashed-line" id="middleDashedLine1"></div>
+        <div class="line dashed-line" id="middleDashedLine2"></div>
+        <div class="line" id="rightSolidLine"></div>
+
+        <!-- Samochód gracza -->
+        <div class="car" id="car"></div>
+
+        <!-- Przycisk restartu -->
+        <button id="playAgain">Play again</button>
+    </div>
+
+    <!-- Skrypt JS tutaj -->
+    <script>
+        const gameArea = document.getElementById('gameArea');
+        const car = document.getElementById('car');
+        const playAgainButton = document.getElementById('playAgain');
+        const speedometer = document.getElementById('speedometer');
+        const distanceMeter = document.getElementById('distance');
+        const gameAreaWidth = gameArea.offsetWidth;
+        const carWidth = car.offsetWidth;
+        const laneWidth = gameAreaWidth / 3;
+        let carPositionIndex = 1;
+        let speed = 0; // Początkowa prędkość w km/h
+        const maxSpeed = 140; // Maksymalna prędkość w km/h
+        let laneSpeed = 0; // Prędkość pasów
+        let distance = 0; // Przebyty dystans w km
+        let accelerating = false;
+        let decelerating = false;
+        let braking = false;
+        let gameOver = false; // Flaga końca gry
+        let obstacleInterval = 1000; // Początkowa wartość interwału (1 sekunda)
+    
+        // Funkcja zapisująca wynik do plików cookie
+        function saveScore(score) {
+            let scores = getScores();
+            scores.push(score);
+            scores.sort((a, b) => b - a); // Sortuj malejąco
+            scores = scores.slice(0, 5); // Zachowaj tylko 5 najlepszych wyników
+            document.cookie = `scores=${JSON.stringify(scores)}; path=/; max-age=31536000`;
+        }
+    
+        // Funkcja pobierająca wyniki z plików cookie
+        function getScores() {
+            const cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)scores\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            return cookieValue ? JSON.parse(cookieValue) : [];
+        }
+    
+        // Wyświetlanie wyników z Leaderboard
+        document.getElementById('leaderboardButton').addEventListener('click', () => {
+            const scores = getScores();
+            if (scores.length === 0) {
+                alert("No results to display.");
+            } else {
+                alert("Top 5 score:\n" + scores.map((score, index) => `${index + 1}. ${score.toFixed(2)} km`).join("\n"));
+            }
+        });
+    
+        // Aktualizacja prędkościomierza
+        function updateSpeedometer() {
+            speedometer.textContent = `Speed: ${Math.round(speed)} km/h`;
+        }
+    
+        // Aktualizacja dystansu
+        function updateDistance(deltaTime) {
+            const distanceTraveled = (speed * deltaTime) / 3600000; // Konwersja prędkości na przebyty dystans w km (m/s)
+            distance += distanceTraveled;
+            distanceMeter.textContent = `Distance: ${distance.toFixed(2)} km`;
+        }
+    
+        // Sterowanie samochodem - WASD
+        document.addEventListener('keydown', (event) => {
+            if (!gameOver) { // Blokowanie ruchu po wypadku
+                switch(event.key) {
+                    case 'a': // Przesuwanie w lewo
+                        if (carPositionIndex > 0) {
+                            carPositionIndex--;
+                        }
+                        break;
+                    case 'd': // Przesuwanie w prawo
+                        if (carPositionIndex < 2) {
+                            carPositionIndex++;
+                        }
+                        break;
+                    case 'w': // Przyspieszanie
+                        accelerating = true;
+                        decelerating = false;
+                        braking = false;
+                        break;
+                    case 's': // Hamowanie
+                        braking = true;
+                        accelerating = false;
+                        decelerating = false;
+                        break;
+                }
+                updateCarPosition();
+            }
+        });
+    
+        document.addEventListener('keyup', (event) => {
+            if (event.key === 'w') {
+                accelerating = false;
+                decelerating = true; // Zwalnianie po odpuszczeniu W
+            }
+            if (event.key === 's') {
+                braking = false;
+                decelerating = true; // Kontynuacja zwalniania po odpuszczeniu S
+            }
+        });
+    
+        // Funkcja aktualizująca pozycję samochodu
+        function updateCarPosition() {
+            car.style.left = (carPositionIndex * laneWidth + laneWidth / 2) + 'px';
+        }
+    
+        // Aktualizacja prędkości pasów
+        function updateLaneSpeed() {
+            const lines = document.querySelectorAll('.dashed-line');
+            lines.forEach(line => {
+                line.style.backgroundPositionY = `${parseFloat(line.style.backgroundPositionY || 0) + laneSpeed}px`;
+            });
+        }
+    
+        // Przyspieszanie
+        function accelerate() {
+            if (speed < maxSpeed) {
+                speed += 0.05; // Szybsze przyspieszanie
+            }
+            laneSpeed = speed / 10; // Prędkość pasów proporcjonalna do prędkości samochodu
+            updateLaneSpeed();
+            updateSpeedometer();
+        }
+    
+        // Zwalnianie
+        function decelerate() {
+            if (speed > 0) {
+                speed -= 0.02; // Zwalnianie po odpuszczeniu gazu
+            }
+            laneSpeed = speed / 10;
+            updateLaneSpeed();
+            updateSpeedometer();
+        }
+    
+        // Hamowanie
+        function brake() {
+            if (speed > 0) {
+                speed -= 0.1; // Silniejsze hamowanie
+            }
+            laneSpeed = speed / 10;
+            updateLaneSpeed();
+            updateSpeedometer();
+        }
+    
+        // Generowanie przeszkód
+        function createObstacle() {
+            const obstacle = document.createElement('div');
+            obstacle.classList.add('obstacle');
+            obstacle.style.top = '-100px';
+            obstacle.style.left = (Math.floor(Math.random() * 3) * laneWidth + laneWidth / 2 - carWidth / 2) + 'px';
+            gameArea.appendChild(obstacle);
+            moveObstacle(obstacle);
+        }
+    
+        // Poruszanie przeszkodami
+        function moveObstacle(obstacle) {
+            function animateObstacle() {
+                if (!gameOver) {
+                    const obstacleTop = parseFloat(obstacle.style.top);
+                    const newTop = obstacleTop + laneSpeed + 2; // Stała prędkość przeszkód + prędkość samochodu
+    
+                    obstacle.style.top = newTop + 'px';
+    
+                    if (newTop < gameArea.offsetHeight) {
+                        requestAnimationFrame(animateObstacle);
+                    } else {
+                        obstacle.remove();
+                    }
+    
+                    checkCollision(obstacle);
+                }
+            }
+    
+            animateObstacle();
+        }
+    
+        // Sprawdzanie kolizji
+        function checkCollision(obstacle) {
+            const carRect = car.getBoundingClientRect();
+            const obstacleRect = obstacle.getBoundingClientRect();
+    
+            if (
+                carRect.left < obstacleRect.left + obstacleRect.width &&
+                carRect.left + carRect.width > obstacleRect.left &&
+                carRect.top < obstacleRect.top + obstacleRect.height &&
+                carRect.height + carRect.top > obstacleRect.top
+            ) {
+                triggerCrash();
+            }
+        }
+    
+        // Wypadek
+        function triggerCrash() {
+            gameOver = true; // Ustawienie flagi końca gry
+    
+            // Zatrzymanie wszystkich przeszkód
+            const obstacles = document.querySelectorAll('.obstacle');
+            obstacles.forEach(obs => obs.style.top = obs.style.top);
+    
+            // Zatrzymanie samochodu gracza i prędkości pasów
+            laneSpeed = 0;
+            speed = 0;
+    
+            // Ukazanie przycisku restartu
+            playAgainButton.style.display = 'inline-block';
+    
+            // Zapisz wynik do leaderboard
+            saveScore(distance);
+        }
+    
+        // Restart gry
+        playAgainButton.addEventListener('click', () => {
+            location.reload();
+        });
+    
+        // Pętla gry
+        let lastTime = performance.now();
+        function gameLoop(timestamp) {
+            const deltaTime = timestamp - lastTime;
+            lastTime = timestamp;
+    
+            if (accelerating) {
+                accelerate();
+            } else if (braking) {
+                brake();
+            } else {
+                decelerate();
+            }
+    
+            updateDistance(deltaTime);
+    
+            if (!gameOver) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+    
+        // Start gry
+        updateCarPosition();
+        requestAnimationFrame(gameLoop);
+        setInterval(createObstacle, 1000); // Generowanie przeszkód co 1 sekunda
+    </script>
+    
+    
+</body>
+</html>

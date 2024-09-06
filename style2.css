@@ -159,3 +159,6 @@ display: block;
     position: relative;
     bottom: 8px;
 }
+body {
+  overflow: hidden;
+}
