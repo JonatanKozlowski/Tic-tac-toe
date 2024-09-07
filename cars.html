@@ -189,6 +189,7 @@
     </style>
 </head>
 <body>
+    
     <button id="leaderboardButton">Leaderboard</button>
     <div id="speedometer">Prędkość: 0 km/h</div>
     <div id="distance">Dystans: 0.00 km</div>
@@ -217,6 +218,7 @@
         const gameAreaWidth = gameArea.offsetWidth;
         const carWidth = car.offsetWidth;
         const laneWidth = gameAreaWidth / 3;
+        const username = document.getElementById('username-display')
         let carPositionIndex = 1;
         let speed = 0; // Początkowa prędkość w km/h
         const maxSpeed = 140; // Maksymalna prędkość w km/h
@@ -394,25 +396,58 @@
                 triggerCrash();
             }
         }
+        
+        // Aktualizacja funkcji saveScore do zapisywania wyników online
+        function saveScore(score) {
+            const username = localStorage.getItem("username");
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "save_score.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log("Wynik zapisany");
+                }
+            };
+            xhr.send(`username=${username}&score=${score}&game_name=cars`);
+        }
+
+        // Aktualizacja wyświetlania leaderboardu
+        document.getElementById('leaderboardButton').addEventListener('click', () => {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "get_leaderboard.php?game_name=cars", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const scores = JSON.parse(xhr.responseText);
+                    if (scores.length === 0) {
+                        alert("No results to display.");
+                    } else {
+                        alert("Top 5 scores:\n" + scores.map((score, index) => `${index + 1}. ${score.username}: ${score.score.toFixed(2)} km`).join("\n"));
+                    }
+                }
+            };
+            xhr.send();
+        });
+
+
     
         // Wypadek
         function triggerCrash() {
-            gameOver = true; // Ustawienie flagi końca gry
-    
-            // Zatrzymanie wszystkich przeszkód
-            const obstacles = document.querySelectorAll('.obstacle');
-            obstacles.forEach(obs => obs.style.top = obs.style.top);
-    
-            // Zatrzymanie samochodu gracza i prędkości pasów
-            laneSpeed = 0;
-            speed = 0;
-    
-            // Ukazanie przycisku restartu
-            playAgainButton.style.display = 'inline-block';
-    
-            // Zapisz wynik do leaderboard
-            saveScore(distance);
-        }
+    gameOver = true; // Ustawienie flagi końca gry
+
+    // Zatrzymanie wszystkich przeszkód
+    const obstacles = document.querySelectorAll('.obstacle');
+    obstacles.forEach(obs => obs.style.top = obs.style.top);
+
+    // Zatrzymanie samochodu gracza i prędkości pasów
+    laneSpeed = 0;
+    speed = 0;
+
+    // Ukazanie przycisku restartu
+    playAgainButton.style.display = 'inline-block';
+
+    // Zapisz wynik do leaderboard
+    saveScore(distance);  // Poprawna funkcja zapisu wyniku
+}
     
         // Restart gry
         playAgainButton.addEventListener('click', () => {
