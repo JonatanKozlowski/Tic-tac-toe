@@ -1,9 +1,14 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Połączenie z bazą danych
 $servername = "jonatan579.mysql.db";
 $username = "jonatan579";
 $password = "yaGKE7bAriBxy8X";
 $dbname = "jonatan579";
+
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

@@ -247,13 +247,22 @@
     
         // Wyświetlanie wyników z Leaderboard
         document.getElementById('leaderboardButton').addEventListener('click', () => {
-            const scores = getScores();
-            if (scores.length === 0) {
-                alert("No results to display.");
-            } else {
-                alert("Top 5 score:\n" + scores.map((score, index) => `${index + 1}. ${score.toFixed(2)} km`).join("\n"));
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "get_leaderboard.php?game_name=cars", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const scores = JSON.parse(xhr.responseText);
+                if (scores.length === 0) {
+                    alert("No results to display.");
+                } else {
+                    alert("Top 5 scores:\n" + scores.map((score, index) => `${index + 1}. ${score.username}: ${score.score.toFixed(2)} km`).join("\n"));
+                }
+            } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                console.error("Błąd podczas pobierania leaderboardu. Status: " + xhr.status);
             }
-        });
+        };
+        xhr.send();
+    });
     
         // Aktualizacja prędkościomierza
         function updateSpeedometer() {
