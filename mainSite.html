@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic tac toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameConteinter">
+        <h1>Hi <span id="username-display"></span>! </h1>
+        <h1>Choose the game you'd like to play</h1>
+        <div class="button-menu">
+            <button onclick="window.location.href='tictactoe.html'" class="button-23">Tic Tac toe</button>
+            <div class="dropdown-content1">
+            </div>
+        </div>
+        <div class="button-menu">
+            <button onclick="window.location.href='cars.html'" class="button-23" id="hide">Driving game</button>
+            <div class="dropdown-content"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Odczytaj nazwę użytkownika z localStorage
+        const username = localStorage.getItem("username");
+
+        // Jeśli nazwa użytkownika jest zapisana, wyświetl ją
+        if (username) {
+            document.getElementById("username-display").textContent = username;
+        } else {
+            document.getElementById("username-display").textContent = "Gość";
+        }
+    </script>
+</body>
+</html>

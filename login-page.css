@@ -1,0 +1,144 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    background-color: #3a3a3a;
+}
+
+#main-holder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    background-color: white;
+}
+
+#login-error-msg-holder {
+    display: grid;   
+}
+
+#login-error-msg {
+    display: block;
+    height: 20%;
+    text-align: center;
+    margin: 0;
+    padding: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0;
+    position: relative;
+    top: 624px;
+}
+
+#error-msg-second-line {
+    display: block;
+}
+
+#login-form {
+    display: grid;
+    position: absolute;
+}
+
+.login-form-field::placeholder {
+    color: #3a3a3a;
+}
+
+#login-form-submit:focus-visible {
+    box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+    transition: box-shadow .2s;
+}
+
+#login-form-submit:active {
+    background-color: #F7F7F7;
+    border-color: #000000;
+    transform: scale(.96);
+}
+
+#login-form-submit:disabled {
+    border-color: #DDDDDD;
+    color: #DDDDDD;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+#login-form-submit:hover {
+    background-color: #F7F7F7;
+    border-color: #000000;
+    transform: scale(.96);
+}
+.login-form-field {
+    border: none;
+    border-bottom: 1px solid #3a3a3a;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    outline: none;
+    padding: 0px 0px 5px 5px;
+    /* Add these properties */
+    height: 70px;
+    font-size: 30px;
+}
+
+#login-form-submit {
+    background-color: #FFFFFF;
+    border: 2px solid #222222;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #222222;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0;
+    outline: none;
+    padding: 13px 23px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    touch-action: manipulation;
+    transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+    user-select: none;
+    -webkit-user-select: none;
+    /* Add these properties */
+    height: 80px;
+    width: 400px;
+}
+
+/* Media queries for responsiveness */
+@media screen and (max-width: 768px) {
+    .login-form-field,
+    #login-form-submit {
+        height: 50px;
+        font-size: 20px;
+        width: 300px;
+    }
+    #login-error-msg{
+        top: 590px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .login-form-field,
+    #login-form-submit {
+        height: 40px;
+        font-size: 16px;
+        width: 200px;
+    }
+    #login-error-msg{
+        top: 570px;
+    }
+}
+
+#login-form {
+    display: grid;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
